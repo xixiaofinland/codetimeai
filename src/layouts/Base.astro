@@ -7,9 +7,9 @@ interface Props {
   description?: string
 }
 
-const { title, description = 'CodeTime AI — 聊编程，聊 AI，聊程序员的那些事' } = Astro.props
+const { title, description = '代码时间 — 聊编程，聊 AI，聊程序员的那些事' } = Astro.props
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
-const pageTitle = title === '首页' ? 'CodeTime AI' : `${title} | CodeTime AI`
+const pageTitle = title === '首页' ? '代码时间' : `${title} | 代码时间`
 ---
 
 <!doctype html>
@@ -24,8 +24,8 @@ const pageTitle = title === '首页' ? 'CodeTime AI' : `${title} | CodeTime AI`
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:type" content="website" />
     <title>{pageTitle}</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" type="application/rss+xml" title="CodeTime AI" href="/feed.xml" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="alternate" type="application/rss+xml" title="代码时间" href="/feed.xml" />
   </head>
   <body class="bg-zinc-950 text-zinc-100 antialiased min-h-screen flex flex-col">
     <Header />

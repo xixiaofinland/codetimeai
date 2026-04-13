@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
   );
 
   return rss({
-    title: "CodeTime AI",
+    title: "代码时间",
     description: "聊编程，聊 AI，聊程序员的那些事",
     site: context.site!,
     items: sorted.map((ep) => ({

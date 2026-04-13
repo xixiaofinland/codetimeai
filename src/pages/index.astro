@@ -5,7 +5,9 @@ import { getCollection } from 'astro:content'
 
 const all = await getCollection('episodes')
 const sorted = all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-const recent = sorted.slice(0, 5)
+const newEps = sorted.filter((ep) => !ep.data.isLegacy)
+const recentNew = newEps.slice(0, 5)
+const legacyCount = sorted.filter((ep) => ep.data.isLegacy).length
 ---
 
 <Base title="首页">
@@ -14,7 +16,10 @@ const recent = sorted.slice(0, 5)
     <p class="font-mono text-orange-500 text-xs mb-4 tracking-wide">
       $ podcast --lang zh-CN --topic programming,ai
     </p>
-    <h1 class="text-4xl font-bold tracking-tight mb-4">CodeTime AI</h1>
+    <h1 class="flex items-center gap-3 text-4xl font-bold tracking-tight mb-4">
+      <img src="/favicon.png" alt="" class="w-10 h-10 rounded-lg" />
+      代码时间
+    </h1>
     <p class="text-lg text-zinc-400 leading-relaxed max-w-lg">
       聊编程，聊 AI，聊程序员的那些事。<br />
       不定期更新，有聊有料。
@@ -35,29 +40,49 @@ const recent = sorted.slice(0, 5)
     </div>
   </section>
 
-  <!-- Recent episodes -->
-  <section class="max-w-3xl mx-auto px-4 pb-16">
-    <h2 class="font-mono text-xs text-zinc-500 uppercase tracking-widest mb-5">最新节目</h2>
-    <div class="flex flex-col gap-3">
-      {recent.map((ep) => (
-        <EpisodeCard
-          slug={ep.slug}
-          title={ep.data.title}
-          date={ep.data.date}
-          description={ep.data.description}
-          guest={ep.data.guest}
-          duration={ep.data.duration}
-          isLegacy={ep.data.isLegacy}
-          episodeNumber={ep.data.episodeNumber}
-        />
-      ))}
-    </div>
-    {sorted.length > 5 && (
-      <div class="mt-6 text-center">
-        <a href="/episodes" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">
-          查看全部 {sorted.length} 期 →
+  <!-- New episodes -->
+  {recentNew.length > 0 && (
+    <section class="max-w-3xl mx-auto px-4 pb-16">
+      <h2 class="font-mono text-xs text-zinc-500 uppercase tracking-widest mb-5">最新节目</h2>
+      <div class="flex flex-col gap-3">
+        {recentNew.map((ep) => (
+          <EpisodeCard
+            slug={ep.slug}
+            title={ep.data.title}
+            date={ep.data.date}
+            description={ep.data.description}
+            guest={ep.data.guest}
+            duration={ep.data.duration}
+            isLegacy={ep.data.isLegacy}
+            episodeNumber={ep.data.episodeNumber}
+          />
+        ))}
+      </div>
+      {newEps.length > 5 && (
+        <div class="mt-6 text-center">
+          <a href="/episodes" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">
+            查看全部 {newEps.length} 期 →
+          </a>
+        </div>
+      )}
+    </section>
+  )}
+
+  <!-- Archive teaser -->
+  {legacyCount > 0 && (
+    <section class="max-w-3xl mx-auto px-4 pb-20">
+      <div class="border border-dashed border-stone-800 rounded p-6 bg-stone-950/20">
+        <div class="font-mono text-xs text-stone-600 mb-2">── archive ──</div>
+        <p class="text-sm text-stone-500 font-mono">
+          节目从 2016 年一路播到 2019 年，共 {legacyCount} 期历史节目已归档。
+        </p>
+        <a
+          href="/episodes#archive"
+          class="inline-block mt-3 text-xs text-amber-700/80 hover:text-amber-500 font-mono transition-colors"
+        >
+          → 浏览历史档案
         </a>
       </div>
-    )}
-  </section>
+    </section>
+  )}
 </Base>

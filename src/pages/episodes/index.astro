@@ -11,16 +11,37 @@ const legacyEps = sorted.filter((ep) => ep.data.isLegacy)
 ---
 
 <Base title="节目列表">
-  <div class="max-w-3xl mx-auto px-4 py-12">
-    <h1 class="text-2xl font-bold mb-1">节目列表</h1>
-    <p class="text-zinc-500 text-sm mb-10">
-      共 {sorted.length} 期
-      {legacyEps.length > 0 && `· ${legacyEps.length} 期迁移自喜马拉雅`}
-    </p>
+  <div class="max-w-3xl mx-auto px-4 py-10">
 
+    <!-- Tab navigation -->
+    <div class="flex items-center gap-0 mb-10 border-b border-zinc-800">
+      {newEps.length > 0 && (
+        <a
+          href="#new"
+          class="px-5 py-2.5 text-sm font-medium text-orange-400 border-b-2 border-orange-500 -mb-px transition-colors"
+        >
+          新节目
+          <span class="ml-1.5 text-xs text-orange-500/70 font-mono">({newEps.length})</span>
+        </a>
+      )}
+      {legacyEps.length > 0 && (
+        <a
+          href="#archive"
+          class="px-5 py-2.5 text-sm font-medium text-stone-500 hover:text-stone-300 border-b-2 border-transparent -mb-px transition-colors font-mono"
+        >
+          历史档案
+          <span class="ml-1.5 text-xs opacity-60">({legacyEps.length})</span>
+        </a>
+      )}
+    </div>
+
+    <!-- New episodes -->
     {newEps.length > 0 && (
-      <section class="mb-12">
-        <h2 class="font-mono text-xs text-orange-500 uppercase tracking-widest mb-4">新节目</h2>
+      <section id="new" class="mb-16 scroll-mt-20">
+        <div class="flex items-baseline gap-3 mb-6">
+          <h2 class="text-lg font-bold">新节目</h2>
+          <span class="font-mono text-xs text-zinc-600">2025 →</span>
+        </div>
         <div class="flex flex-col gap-3">
           {newEps.map((ep) => (
             <EpisodeCard
@@ -38,12 +59,19 @@ const legacyEps = sorted.filter((ep) => ep.data.isLegacy)
       </section>
     )}
 
+    <!-- Legacy archive -->
     {legacyEps.length > 0 && (
-      <section>
-        <h2 class="font-mono text-xs text-zinc-500 uppercase tracking-widest mb-4">
-          历史节目（迁移自喜马拉雅）
-        </h2>
-        <div class="flex flex-col gap-3">
+      <section id="archive" class="scroll-mt-20">
+        <!-- Archive header with old-school feel -->
+        <div class="mb-6 pb-4 border-b border-dashed border-stone-800">
+          <div class="font-mono text-xs text-stone-600 mb-1">── archive ──────────────────</div>
+          <div class="flex items-baseline gap-3">
+            <h2 class="font-mono text-base text-amber-700/80">历史档案</h2>
+            <span class="font-mono text-xs text-stone-600">2016 – 2019</span>
+          </div>
+          <p class="text-xs text-stone-600 font-mono mt-1">迁移自喜马拉雅 · {legacyEps.length} 期</p>
+        </div>
+        <div class="flex flex-col gap-2">
           {legacyEps.map((ep) => (
             <EpisodeCard
               slug={ep.slug}
@@ -59,5 +87,6 @@ const legacyEps = sorted.filter((ep) => ep.data.isLegacy)
         </div>
       </section>
     )}
+
   </div>
 </Base>
