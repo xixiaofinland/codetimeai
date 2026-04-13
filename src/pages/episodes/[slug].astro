@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro'
+import { getCollection, getEntry } from 'astro:content'
+
+export async function getStaticPaths() {
+  const episodes = await getCollection('episodes')
+  return episodes.map((ep) => ({ params: { slug: ep.slug } }))
+}
+
+const { slug } = Astro.params
+const episode = await getEntry('episodes', slug as string)
+
+if (!episode) return Astro.redirect('/episodes')
+
+const { Content } = await episode.render()
+const { title, date, description, audioUrl, duration, guest, episodeNumber, isLegacy, tags } =
+  episode.data
+
+const dateStr = date.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+})
+---
+
+<Base title={title} description={description}>
+  <article class="max-w-3xl mx-auto px-4 py-12">
+    <a
+      href="/episodes"
+      class="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-300 transition-colors mb-8"
+    >
+      ← 节目列表
+    </a>
+
+    <header class="mb-8">
+      <div class="flex items-center gap-2 mb-3 flex-wrap">
+        {episodeNumber !== undefined && (
+          <span class="font-mono text-sm text-orange-500 font-bold">
+            #{String(episodeNumber).padStart(3, '0')}
+          </span>
+        )}
+        {isLegacy && (
+          <span class="text-xs px-2 py-0.5 rounded bg-zinc-800 text-zinc-500">
+            迁移自喜马拉雅
+          </span>
+        )}
+        {tags.map((tag) => (
+          <span class="text-xs px-2 py-0.5 rounded bg-zinc-800/60 text-zinc-400">{tag}</span>
+        ))}
+      </div>
+      <h1 class="text-2xl font-bold leading-snug mb-3">{title}</h1>
+      <div class="flex items-center gap-3 text-sm text-zinc-500 flex-wrap">
+        <time datetime={date.toISOString()}>{dateStr}</time>
+        {guest && <span>· 嘉宾：{guest}</span>}
+        {duration && <span class="font-mono">· {duration}</span>}
+      </div>
+    </header>
+
+    <!-- Audio player -->
+    <div class="mb-8 bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+      <audio controls preload="metadata" class="w-full" src={audioUrl}>
+        您的浏览器不支持音频播放。
+        <a href={audioUrl} class="text-orange-400 underline">直接下载</a>
+      </audio>
+    </div>
+
+    <p class="text-zinc-300 leading-relaxed mb-10">{description}</p>
+
+    <!-- Show notes -->
+    <div class="prose prose-invert prose-zinc max-w-none prose-a:text-orange-400 prose-headings:font-semibold">
+      <Content />
+    </div>
+  </article>
+</Base>

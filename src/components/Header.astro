@@ -1,0 +1,30 @@
+---
+const nav = [
+  { href: '/episodes', label: '节目列表' },
+  { href: '/about', label: '关于' },
+]
+const path = Astro.url.pathname
+---
+
+<header class="border-b border-zinc-800/60 sticky top-0 z-10 bg-zinc-950/90 backdrop-blur">
+  <div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2 group">
+      <span class="font-mono text-orange-500 font-bold text-base leading-none">&gt;_</span>
+      <span class="font-semibold tracking-tight text-sm">CodeTime AI</span>
+    </a>
+    <nav class="flex items-center gap-6">
+      {nav.map(({ href, label }) => (
+        <a
+          href={href}
+          class={`text-sm transition-colors ${
+            path.startsWith(href)
+              ? 'text-orange-400'
+              : 'text-zinc-400 hover:text-zinc-100'
+          }`}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

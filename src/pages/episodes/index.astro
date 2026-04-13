@@ -1,0 +1,63 @@
+---
+import Base from '../../layouts/Base.astro'
+import EpisodeCard from '../../components/EpisodeCard.astro'
+import { getCollection } from 'astro:content'
+
+const all = await getCollection('episodes')
+const sorted = all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+
+const newEps = sorted.filter((ep) => !ep.data.isLegacy)
+const legacyEps = sorted.filter((ep) => ep.data.isLegacy)
+---
+
+<Base title="节目列表">
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    <h1 class="text-2xl font-bold mb-1">节目列表</h1>
+    <p class="text-zinc-500 text-sm mb-10">
+      共 {sorted.length} 期
+      {legacyEps.length > 0 && `· ${legacyEps.length} 期迁移自喜马拉雅`}
+    </p>
+
+    {newEps.length > 0 && (
+      <section class="mb-12">
+        <h2 class="font-mono text-xs text-orange-500 uppercase tracking-widest mb-4">新节目</h2>
+        <div class="flex flex-col gap-3">
+          {newEps.map((ep) => (
+            <EpisodeCard
+              slug={ep.slug}
+              title={ep.data.title}
+              date={ep.data.date}
+              description={ep.data.description}
+              guest={ep.data.guest}
+              duration={ep.data.duration}
+              isLegacy={ep.data.isLegacy}
+              episodeNumber={ep.data.episodeNumber}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {legacyEps.length > 0 && (
+      <section>
+        <h2 class="font-mono text-xs text-zinc-500 uppercase tracking-widest mb-4">
+          历史节目（迁移自喜马拉雅）
+        </h2>
+        <div class="flex flex-col gap-3">
+          {legacyEps.map((ep) => (
+            <EpisodeCard
+              slug={ep.slug}
+              title={ep.data.title}
+              date={ep.data.date}
+              description={ep.data.description}
+              guest={ep.data.guest}
+              duration={ep.data.duration}
+              isLegacy={ep.data.isLegacy}
+              episodeNumber={ep.data.episodeNumber}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</Base>

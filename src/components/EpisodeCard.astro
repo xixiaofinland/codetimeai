@@ -1,0 +1,50 @@
+---
+interface Props {
+  slug: string
+  title: string
+  date: Date
+  description: string
+  guest?: string
+  duration?: string
+  isLegacy: boolean
+  episodeNumber?: number
+}
+
+const { slug, title, date, description, guest, duration, isLegacy, episodeNumber } = Astro.props
+
+const dateStr = date.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+})
+---
+
+<article class="group border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors bg-zinc-900/40">
+  <a href={`/episodes/${slug}`} class="block">
+    <div class="flex items-start justify-between gap-4 mb-2">
+      <div class="flex items-center gap-2 flex-wrap">
+        {episodeNumber !== undefined && (
+          <span class="font-mono text-xs text-orange-500 font-bold">
+            #{String(episodeNumber).padStart(3, '0')}
+          </span>
+        )}
+        {isLegacy && (
+          <span class="text-xs px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-500">
+            迁移
+          </span>
+        )}
+      </div>
+      {duration && (
+        <span class="text-xs text-zinc-500 font-mono shrink-0">{duration}</span>
+      )}
+    </div>
+    <h2 class="font-medium leading-snug mb-1.5 group-hover:text-orange-400 transition-colors">
+      {title}
+    </h2>
+    <p class="text-sm text-zinc-400 line-clamp-2 mb-3">{description}</p>
+    <div class="flex items-center gap-3 text-xs text-zinc-500">
+      <time datetime={date.toISOString()}>{dateStr}</time>
+      {guest && <span>· 嘉宾：{guest}</span>}
+    </div>
+  </a>
+</article>
