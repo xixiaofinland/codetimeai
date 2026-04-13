@@ -1,5 +1,7 @@
 # Agent Guidelines for codetimeai
 
+# Agent Guidelines for codetimeai
+
 Chinese-language podcast site about programming and AI, hosted on GitHub Pages.
 
 Tech: Astro 4, Tailwind CSS 3, TypeScript
