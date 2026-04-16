@@ -71,18 +71,18 @@ const legacyCount = sorted.filter((ep) => ep.data.isLegacy).length
   <!-- Archive teaser -->
   {legacyCount > 0 && (
     <section class="max-w-3xl mx-auto px-4 pb-20">
-      <div class="border border-dashed border-stone-800 rounded p-6 bg-stone-950/20">
+      <a
+        href="/episodes#archive"
+        class="group block rounded border border-dashed border-stone-800 bg-stone-950/20 p-6 transition-colors hover:border-stone-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+      >
         <div class="font-mono text-xs text-stone-600 mb-2">── archive ──</div>
         <p class="text-sm text-stone-500 font-mono">
           节目从 2016 年一路播到 2019 年，共 {legacyCount} 期历史节目已归档。
         </p>
-        <a
-          href="/episodes#archive"
-          class="inline-block mt-3 text-xs text-amber-700/80 hover:text-amber-500 font-mono transition-colors"
-        >
+        <div class="mt-3 text-xs font-mono text-amber-700/80 transition-colors group-hover:text-amber-500">
           → 浏览历史档案
-        </a>
-      </div>
+        </div>
+      </a>
     </section>
   )}
 </Base>

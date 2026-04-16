@@ -15,6 +15,11 @@ if (!episode) return Astro.redirect('/episodes')
 const { Content } = await episode.render()
 const { title, date, description, audioUrl, duration, guest, episodeNumber, isLegacy, tags } =
   episode.data
+const playbackSpeeds = [
+  { value: '1', label: '1×' },
+  { value: '1.2', label: '1.2×' },
+  { value: '1.5', label: '1.5×' },
+]
 
 const dateStr = date.toLocaleDateString('zh-CN', {
   year: 'numeric',
@@ -57,11 +62,29 @@ const dateStr = date.toLocaleDateString('zh-CN', {
     </header>
 
     <!-- Audio player -->
-    <div class="mb-8 bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-      <audio controls preload="metadata" class="w-full" src={audioUrl}>
+    <div class="mb-8 rounded-lg border border-zinc-800 bg-zinc-900 p-4" data-audio-player>
+      <audio controls preload="metadata" class="w-full rounded-lg" src={audioUrl} data-audio-element>
         您的浏览器不支持音频播放。
         <a href={audioUrl} class="text-orange-400 underline">直接下载</a>
       </audio>
+      <div class="mt-3 flex flex-wrap justify-center gap-2">
+        {playbackSpeeds.map(({ value, label }, index) => (
+          <button
+            type="button"
+            class:list={[
+              'rounded-full border px-3 py-1 text-sm transition-colors',
+              index === 0
+                ? 'border-orange-500 bg-orange-500 text-white'
+                : 'border-zinc-700 bg-zinc-950 text-zinc-300 hover:border-orange-500 hover:text-white',
+            ]}
+            data-speed-button
+            data-speed={value}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
     </div>
 
     <p class="text-zinc-300 leading-relaxed mb-10">{description}</p>
@@ -71,4 +94,70 @@ const dateStr = date.toLocaleDateString('zh-CN', {
       <Content />
     </div>
   </article>
+
+  <script is:inline>
+    const playbackSpeedStorageKey = 'playback-speed'
+
+    document.querySelectorAll('[data-audio-player]').forEach((player) => {
+      const audio = player.querySelector('[data-audio-element]')
+      const buttons = [...player.querySelectorAll('[data-speed-button]')]
+
+      if (!(audio instanceof HTMLAudioElement) || buttons.length === 0) {
+        return
+      }
+
+      const setActiveButton = (speed) => {
+        buttons.forEach((button) => {
+          const isActive = button.dataset.speed === speed
+
+          button.classList.toggle('border-orange-500', isActive)
+          button.classList.toggle('bg-orange-500', isActive)
+          button.classList.toggle('text-white', isActive)
+          button.classList.toggle('border-zinc-700', !isActive)
+          button.classList.toggle('bg-zinc-950', !isActive)
+          button.classList.toggle('text-zinc-300', !isActive)
+          button.setAttribute('aria-pressed', String(isActive))
+        })
+      }
+
+      const setPlaybackSpeed = (speed, persist = true) => {
+        const parsedSpeed = Number.parseFloat(speed)
+
+        if (!Number.isFinite(parsedSpeed)) {
+          return
+        }
+
+        audio.playbackRate = parsedSpeed
+        setActiveButton(speed)
+
+        if (persist) {
+          try {
+            localStorage.setItem(playbackSpeedStorageKey, speed)
+          } catch {}
+        }
+      }
+
+      let savedSpeed = null
+
+      try {
+        savedSpeed = localStorage.getItem(playbackSpeedStorageKey)
+      } catch {}
+
+      const initialSpeed = buttons.some((button) => button.dataset.speed === savedSpeed)
+        ? savedSpeed
+        : '1'
+
+      setPlaybackSpeed(initialSpeed, false)
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const speed = button.dataset.speed
+
+          if (speed) {
+            setPlaybackSpeed(speed)
+          }
+        })
+      })
+    })
+  </script>
 </Base>
