@@ -1,12 +1,10 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
 import type { APIContext } from "astro";
+import { sortEpisodes } from "../utils/episodes";
 
 export async function GET(context: APIContext) {
-  const episodes = await getCollection("episodes");
-  const sorted = episodes.sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-  );
+  const sorted = sortEpisodes(await getCollection("episodes"));
 
   return rss({
     title: "代码时间",

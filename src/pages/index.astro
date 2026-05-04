@@ -2,9 +2,9 @@
 import Base from '../layouts/Base.astro'
 import EpisodeCard from '../components/EpisodeCard.astro'
 import { getCollection } from 'astro:content'
+import { sortEpisodes } from '../utils/episodes'
 
-const all = await getCollection('episodes')
-const sorted = all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const sorted = sortEpisodes(await getCollection('episodes'))
 const newEps = sorted.filter((ep) => !ep.data.isLegacy)
 const recentNew = newEps.slice(0, 5)
 const legacyCount = sorted.filter((ep) => ep.data.isLegacy).length
