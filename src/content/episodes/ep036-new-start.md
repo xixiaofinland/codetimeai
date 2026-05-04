@@ -2,8 +2,8 @@
 title: "第036期：十年后重启，在 AI 时代继续学习与记录"
 date: 2026-05-01
 description: "时隔十年，代码时间重新开麦。聊聊为什么在 2026 年重启这档播客，以及 AI 时代里程序员的学习、焦虑、记录与陪伴。"
-audioUrl: "https://pinecast.com/listen/placeholder.mp3"
-duration: "09:09"
+audioUrl: "https://pinecast.com/listen/05957566-7d13-4077-997f-c92826af2ab7.mp3"
+duration: "11:58"
 guest: ""
 episodeNumber: 36
 isLegacy: false

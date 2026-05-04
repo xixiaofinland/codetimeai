@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro'
 import { getCollection, getEntry } from 'astro:content'
+import { PODCAST_SITE_URL, getEpisodeUrl } from '../../utils/podcast'
 
 export async function getStaticPaths() {
   const episodes = await getCollection('episodes')
@@ -25,6 +26,7 @@ const playbackSkips = [
   { seconds: -15, label: '-15 秒' },
   { seconds: 15, label: '+15 秒' },
 ]
+const episodeUrl = getEpisodeUrl(slug as string)
 
 const dateStr = date.toLocaleDateString('zh-CN', {
   year: 'numeric',
@@ -108,6 +110,22 @@ const dateStr = date.toLocaleDateString('zh-CN', {
     <div class="prose prose-invert prose-zinc max-w-none prose-a:text-orange-400 prose-headings:font-semibold">
       <Content />
     </div>
+
+    <section class="mt-10 rounded-lg border border-zinc-800 bg-zinc-900/40 p-4 text-sm text-zinc-400">
+      <h2 class="mb-2 text-sm font-semibold text-zinc-200">节目主页与 shownotes</h2>
+      <p>
+        节目主页：
+        <a href={PODCAST_SITE_URL} class="text-orange-400 hover:text-orange-300">
+          {PODCAST_SITE_URL}
+        </a>
+      </p>
+      <p class="mt-1">
+        本期 shownotes：
+        <a href={episodeUrl} class="break-all text-orange-400 hover:text-orange-300">
+          {episodeUrl}
+        </a>
+      </p>
+    </section>
   </article>
 
   <script is:inline>
