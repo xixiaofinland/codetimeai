@@ -9,10 +9,22 @@ export async function GET(context: APIContext) {
   const sorted = sortEpisodes(await getCollection("episodes"));
   const container = await experimental_AstroContainer.create();
 
+  const itunesImage = `${context.site}favicon.png`;
+
   return rss({
     title: "代码时间",
     description: "聊编程，聊 AI，聊程序员的那些事",
     site: context.site!,
+    xmlns: {
+      itunes: "http://www.itunes.apple.com/DTDs/1.0/DTD-podcast-1.0.dtd",
+    },
+    customData: `
+      <language>zh-CN</language>
+      <itunes:author>代码时间</itunes:author>
+      <itunes:summary>聊编程，聊 AI，聊程序员的那些事</itunes:summary>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:image href="${itunesImage}" />
+    `,
     items: await Promise.all(
       sorted.map(async (ep) => {
         const { Content } = await ep.render();
@@ -43,6 +55,5 @@ export async function GET(context: APIContext) {
         };
       }),
     ),
-    customData: "<language>zh-CN</language>",
   });
 }
