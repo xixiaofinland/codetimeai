@@ -25,7 +25,7 @@ Create `src/content/episodes/<slug>.md` with frontmatter:
 title: "第N期：..."
 date: YYYY-MM-DD
 description: "..."
-audioUrl: "https://pinecast.com/listen/..."
+audioUrl: "https://op3.dev/e/media.salesforceway.com/codetime/<file>.mp3" # audio lives in Cloudflare R2, OP3 prefix counts plays
 duration: "HH:MM"
 guest: "嘉宾姓名"
 episodeNumber: N

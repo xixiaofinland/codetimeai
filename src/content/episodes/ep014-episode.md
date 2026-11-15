@@ -2,7 +2,7 @@
 title: "第014期：爆栈之旅 - 灵感之源"
 date: 2016-08-01
 description: "爆栈之旅 - 灵感之源"
-audioUrl: "https://pinecast.com/listen/fb2bdaaf-18e2-45c3-87b4-7c6139bd16a4:708b03bb-1d90-413e-a0b5-7f60a438f1b9.m4a"
+audioUrl: "https://op3.dev/e/media.salesforceway.com/codetime/fb2bdaaf-18e2-45c3-87b4-7c6139bd16a4-708b03bb-1d90-413e-a0b5-7f60a438f1b9.m4a"
 duration: "1:10:52"
 guest: "灵感之源"
 episodeNumber: 14
